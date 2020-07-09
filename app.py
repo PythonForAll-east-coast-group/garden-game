@@ -27,6 +27,15 @@ class Scene(object)
 
     class DestroyedGarden(Scene):
 
+        quips = [
+        "Your garden is destroyed. The animals are formidable foes!",
+        "Maybe you should take up dirt farming."
+        "Raking is not your strength."
+        "Maybe some garden gnomes would help."
+        "Better luck next season!"
+
+    ]
+
         def enter(self):
             pass
 
