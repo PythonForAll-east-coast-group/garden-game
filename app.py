@@ -8,70 +8,122 @@
 from sys import exit
 from random import randint
 from textwrap import dedent
+import weapons_tools
 
 
-class Scene(object)
+def print_inventory():
+    print("You currently have these items in your inventory:")
+    for item in weapons_tools.inventory:
+        print("- " + item.name)
 
-   def enter(self):
+
+class Scene(object):
+
+    def enter(self):
         print("This scene is not yet configured.")
         print("Subclass it and implement enter().")
         exit(1)
 
-    class Engine(object):
 
-        def __init__(self, garden_map):
-            pass
+class Engine(object):
 
-        def play(self):
-            pass
+    def __init__(self, garden_map):
+        self.garden_map = garden_map
+        pass
 
-    class DestroyedGarden(Scene):
+    def play(self):
+        current_scene = self.garden_map.opening_scene()
+        last_scene = self.garden_map.next_scene('finished')
 
-        quips = [
+        while current_scene != last_scene:
+            next_scene_name = current_scene.enter()
+            current_scene = self.garden_map.next_scene(next_scene_name)
+
+        current_scene.enter()
+
+
+class DestroyedGarden(Scene):
+    quips = [
         "Your garden is destroyed. The animals are formidable foes!",
-        "Maybe you should take up dirt farming."
-        "Raking is not your strength."
-        "Maybe some garden gnomes would help."
-        "Better luck next season!"
-
+        "Maybe you should take up dirt farming.",
+        "Raking is not your strength.",
+        "Maybe some garden gnomes would help.",
+        "Better luck next season!",
     ]
 
-        def enter(self):
-            pass
+    def enter(self):
+        print(DestroyedGarden.quips[randint(0, len(self.quips) - 1)])
+        exit(1)
 
-    class HerbGarden(Scene):
 
-        def enter(self):
-            pass
+class HerbGarden(Scene):
 
-    class RoseGarden(Scene):
+    def enter(self):
+        print(dedent("""
+            You enter a lovely herb garden bristling with life. 
+            You can smell rosemary, lavender, and cilantro.
+            Faintly you can smell roses and strawberries, somewhere a bit away from here.
+            What would you like to do?
+        """))
 
-        def enter(self):
-            pass
+        print_inventory()
 
-    class StrawberryPatch(Scene):
+        answer = input("> ")
 
-        def enter(self):
-            pass
+        if 'rake' in answer:
+            print("You rake and tear up all the herbs.")
+            return 'destroyed_garden'
 
-    class Hammock(Scene):
+        elif 'spray_bottle' in answer:
+            print("You")
 
-        def enter(self):
-            pass
+
+class RoseGarden(Scene):
+
+    def enter(self):
+        pass
+
+
+class StrawberryPatch(Scene):
+
+    def enter(self):
+        pass
+
+
+class Hammock(Scene):
+
+    def enter(self):
+        pass
+
+
+class Finished(Scene):
+
+    def enter(self):
+        print("You won! Good job.")
+        return 'finished'
 
 
 class Map(object):
 
+    scenes = {
+        'destroyed_garden': DestroyedGarden(),
+        'hammock': Hammock(),
+        'herb_garden': HerbGarden(),
+        'rose_garden': RoseGarden(),
+        'strawberry_patch': StrawberryPatch(),
+        'finished': Finished()
+    }
+
     def __init__(self, start_scene):
-        pass
+        self.start_scene = start_scene
 
     def next_scene(self, scene_name):
-        pass
+        return Map.scenes.get(scene_name)
 
     def opening_scene(self):
-        pass
+        return self.next_scene(self.start_scene)
 
 
-a_map = Map('HerbGarden')
+a_map = Map('herb_garden')
 a_game = Engine(a_map)
 a_game.play()
