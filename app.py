@@ -92,8 +92,10 @@ class StrawberryPatch(Scene):
             was full of ripe berries ready for picking. Your mouth is
             watering as you bend down. But wait, as you move
             the large green leaves aside to look for the berries
-            underneath you  
+            underneath, what you see shocks you. What do you see? 
             """))
+
+        print_inventory()
 
         action = input("> ")
 
