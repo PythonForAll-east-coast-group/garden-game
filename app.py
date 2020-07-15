@@ -87,7 +87,33 @@ class RoseGarden(Scene):
 class StrawberryPatch(Scene):
 
     def enter(self):
-        pass
+        print(dedent("""
+            You enter the Strawberry Patch. Just yesterday the patch
+            was full of ripe berries ready for picking. Your mouth is
+            watering as you bend down. But wait, as you move
+            the large green leaves aside to look for the berries
+            underneath you  
+            """))
+
+        action = input("> ")
+
+        if action == "don't see berries":
+            print(dedent("""
+                You fall to the ground, devastated. The deer decimated your berries.
+                """))
+            return 'destroyed_garden'
+
+        elif action == "see berries":
+            print(dedent("""
+                You see more berries than ever! You gather as 
+                many as you can hold. It's time for some well-
+                deserved rest in the hammock.
+                """))
+
+            return 'hammock'
+        else:
+            print("DOES NOT COMPUTE!")
+            return "strawberry_patch"
 
 
 class Hammock(Scene):
