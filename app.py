@@ -29,7 +29,6 @@ class Engine(object):
 
     def __init__(self, garden_map):
         self.garden_map = garden_map
-        pass
 
     def play(self):
         current_scene = self.garden_map.opening_scene()
